@@ -1,6 +1,8 @@
 import express from 'express'
 import { connect } from './config/db/db.js';
 import servicesRoutes from './routes/servicesRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+
 import dotenv from 'dotenv'
 import cors from 'cors'
 
@@ -14,7 +16,7 @@ app.use(express.json())
 
 connect()
 
-const whiteList = [process.env.FRONT_URL]
+const whiteList = process.argv[2] === '--postman' ? [process.env.FRONT_URL, undefined] : [process.env.FRONT_URL]
 const corsOptions = {
     origin: function(origin, callback) {
         if(whiteList.includes(origin)){
@@ -27,6 +29,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.use('/api/services' ,servicesRoutes)
+app.use('/api/auth', authRoutes)
 
 
 app.listen(PORT, () => {

@@ -1,5 +1,4 @@
 import Services from '../models/Services.model.js'
-import { services } from '../data/beautyServices.js'
 import { validateObjectId, validateService } from '../helpers/validate.js'
 
 const getServices = async (request, response) => {
