@@ -2,7 +2,17 @@ import Users from '../models/Users.model.js'
 import bcrypt from 'bcrypt';
 import { sendEmailVerification } from '../email/authEmailService.js';
 import { uniqueId } from '../helpers/uniqueId.js';
+import { generateJWT } from '../helpers/jsonwebtoken.js'
+import { verifyJWT } from '../helpers/jsonwebtoken.js';
 
+
+const user = async (request, response) => {
+    const id = verifyJWT(request)
+    const user = await Users.findById(id).select("-password -verified -createdAt -updatedAt -__v -token")
+    response.status(200).json(
+        user
+    )
+}
 
 const registerUser = async (request, response, next) => {
     const { name, email, password } = request.body
@@ -74,18 +84,17 @@ const verifyAccount = async (request, response) => {
 
 }
 
-
 const loginUser = async (request, response) => {
-    const {email, password} = request.body;
+    const { email, password } = request.body;
 
-    const existUser = await Users.findOne({email})
-    if(!existUser){
+    const existUser = await Users.findOne({ email })
+    if (!existUser) {
         const error = new Error('El Usuario No existe, Registrate')
         return response.status(400).json({
             msg: error.message
         })
     }
-    if(!existUser.verified){
+    if (!existUser.verified) {
         const error = new Error('No has verificado tu cuenta, revisa tu email')
         return response.status(400).json({
             msg: error.message
@@ -98,13 +107,18 @@ const loginUser = async (request, response) => {
         return response.status(403).json({ msg: error.message })
     }
 
+    const token = generateJWT(existUser._id)
+
     response.status(200).json({
-        msg: 'Usuario Logado Correctamente'
+        token,
+        msg: 'Logueado correctamente'
     })
-   
+
 }
 
+
 export {
+    user,
     registerUser,
     verifyAccount,
     loginUser
