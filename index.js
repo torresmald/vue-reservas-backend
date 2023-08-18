@@ -2,6 +2,8 @@ import express from 'express'
 import { connect } from './config/db/db.js';
 import servicesRoutes from './routes/servicesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import citasRoutes from './routes/citasRoutes.js';
+
 
 import dotenv from 'dotenv'
 import cors from 'cors'
@@ -30,6 +32,8 @@ app.use(cors(corsOptions))
 
 app.use('/api/services' ,servicesRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/citas', citasRoutes)
+
 
 
 app.listen(PORT, () => {
