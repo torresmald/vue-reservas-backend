@@ -1,6 +1,6 @@
 import Users from '../models/Users.model.js'
 import bcrypt from 'bcrypt';
-import { sendEmailVerification } from '../email/authEmailService.js';
+import { sendEmailVerification, sendEmailForgotPassword } from '../email/authEmailService.js';
 import { uniqueId } from '../helpers/uniqueId.js';
 import { generateJWT } from '../helpers/jsonwebtoken.js'
 import { verifyJWT } from '../helpers/jsonwebtoken.js';
@@ -117,9 +117,75 @@ const loginUser = async (request, response) => {
 }
 
 
+const forgotPassword = async (request, response) => {
+    const { email } = request.body
+    const user = await Users.findOne({ email })
+    if (!user) {
+        const error = new Error('El usuario no existe')
+        return response.status(404).json({ msg: error.message })
+    }
+    try {
+        user.token = uniqueId()
+        const result = await user.save()
+        await sendEmailForgotPassword({
+            name: result.name,
+            email: result.email,
+            token: result.token
+        })
+        response.json({
+            msg: 'Hemos enviado un email con las instrucciones'
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const verifyPasswordResetToken = async (request, response) => {
+    const {token} = request.params
+
+    const user = await Users.findOne({token})
+    if(!user){
+        const error = new Error('Token no Valido')
+        return response.status(404).json({
+            msg: error.message
+        })
+    }
+    response.status(200).json({
+        msg: 'Token Valido'
+    })
+}
+
+const updatePassword = async (request, response) => {
+    const {password} = request.body
+    const {token} = request.params
+    const user = await Users.findOne({token})
+    if(!user){
+        const error = new Error('Token no Valido')
+        return response.status(404).json({
+            msg: error.message
+        })
+    }
+
+    try {
+        const encryptedPassword = await bcrypt.hash(password.toString(), parseInt(10));
+        user.token = ''
+        user.password = encryptedPassword
+        await user.save()
+        response.status(201).json({
+            msg: 'Password Modificado Correctamente'
+        })
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export {
     user,
     registerUser,
     verifyAccount,
-    loginUser
+    loginUser,
+    forgotPassword,
+    verifyPasswordResetToken,
+    updatePassword
 }

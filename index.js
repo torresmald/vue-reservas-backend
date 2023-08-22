@@ -3,6 +3,7 @@ import { connect } from './config/db/db.js';
 import servicesRoutes from './routes/servicesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import citasRoutes from './routes/citasRoutes.js';
+import userRoutes from './routes/userRoutes.js'
 
 
 import dotenv from 'dotenv'
@@ -33,6 +34,8 @@ app.use(cors(corsOptions))
 app.use('/api/services' ,servicesRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/citas', citasRoutes)
+app.use('/api/users', userRoutes)
+
 
 
 

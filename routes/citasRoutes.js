@@ -1,5 +1,5 @@
 import express from 'express'
-import {createCita, getCitaByDate} from '../controllers/citasController.js'
+import {createCita, deleteCita, getCitaByDate, getCitaById, updateCita} from '../controllers/citasController.js'
 import { authMiddleware } from '../middleware/authMiddleware.js'
 
 
@@ -10,5 +10,9 @@ router.route('/')
     .post(authMiddleware, createCita)
     .get(authMiddleware, getCitaByDate)
 
+router.route('/:id')
+    .get(authMiddleware, getCitaById)
+    .put(authMiddleware, updateCita)
+    .delete(authMiddleware, deleteCita)
 
 export default router
