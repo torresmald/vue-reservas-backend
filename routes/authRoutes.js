@@ -1,5 +1,5 @@
 import express from 'express'
-import { registerUser, verifyAccount, loginUser, user, forgotPassword, updatePassword, verifyPasswordResetToken} from '../controllers/authController.js'
+import { registerUser, verifyAccount, loginUser, user, forgotPassword, updatePassword, verifyPasswordResetToken, admin} from '../controllers/authController.js'
 import { authMiddleware } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
@@ -14,6 +14,8 @@ router.route('/forgot-password/:token')
 router.get('/verify/:token', verifyAccount)
 
 router.get('/user', authMiddleware, user)
+router.get('/admin', authMiddleware, admin)
+
 
 
 

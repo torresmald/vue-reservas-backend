@@ -141,10 +141,10 @@ const forgotPassword = async (request, response) => {
 }
 
 const verifyPasswordResetToken = async (request, response) => {
-    const {token} = request.params
+    const { token } = request.params
 
-    const user = await Users.findOne({token})
-    if(!user){
+    const user = await Users.findOne({ token })
+    if (!user) {
         const error = new Error('Token no Valido')
         return response.status(404).json({
             msg: error.message
@@ -156,10 +156,10 @@ const verifyPasswordResetToken = async (request, response) => {
 }
 
 const updatePassword = async (request, response) => {
-    const {password} = request.body
-    const {token} = request.params
-    const user = await Users.findOne({token})
-    if(!user){
+    const { password } = request.body
+    const { token } = request.params
+    const user = await Users.findOne({ token })
+    if (!user) {
         const error = new Error('Token no Valido')
         return response.status(404).json({
             msg: error.message
@@ -180,6 +180,21 @@ const updatePassword = async (request, response) => {
     }
 }
 
+
+const admin = async (request, response) => {
+    const id = verifyJWT(request)
+    const user = await Users.findById(id).select("-password -verified -createdAt -updatedAt -__v -token")
+    if (!user.admin) {
+        const error = new Error('Acceso Prohibido')
+        return response.status(403).json({
+            msg: error.message
+        })
+    }
+    response.status(200).json(
+        user
+    )
+}
+
 export {
     user,
     registerUser,
@@ -187,5 +202,6 @@ export {
     loginUser,
     forgotPassword,
     verifyPasswordResetToken,
-    updatePassword
+    updatePassword,
+    admin
 }
