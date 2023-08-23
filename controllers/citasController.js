@@ -10,6 +10,7 @@ const createCita = async (request, response) => {
     try {
         const cita = request.body;
         cita.user = request.user;
+        console.log(cita);
         const newCita = new Citas(cita)
         const savedCita = await newCita.save()
         await sendNewCita({
