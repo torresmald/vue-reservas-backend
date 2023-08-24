@@ -6,9 +6,6 @@ import citasRoutes from './routes/citasRoutes.js';
 import userRoutes from './routes/userRoutes.js'
 
 import path from 'path'
-import { fileURLToPath } from 'url';
-
-
 import dotenv from 'dotenv'
 import cors from 'cors'
 
@@ -34,13 +31,14 @@ connect()
 // }
 app.use(cors())
 
-const currentFilePath = fileURLToPath(import.meta.url);
-const publicPath = path.join(path.dirname(currentFilePath), 'public');
-app.use(express.static(publicPath));
+// Servir los archivos estáticos de la aplicación Vue
+app.use(express.static(path.join(__dirname, 'dist')));
 
-app.use((req, res, next) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+// Configuración para manejar todas las rutas y devolver la página principal
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
+
 
 app.get('/', (request, response) => {
     response.status(200).json('Bienvenido a mi API Reservas.')
