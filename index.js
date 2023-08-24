@@ -32,10 +32,12 @@ connect()
 // }
 app.use(cors())
 
-app.use(express.static(path.join(__dirname, 'public')));
+const currentFilePath = fileURLToPath(import.meta.url);
+const publicPath = path.join(path.dirname(currentFilePath), 'public');
+app.use(express.static(publicPath));
 
 app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.get('/', (request, response) => {
