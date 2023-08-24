@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import citasRoutes from './routes/citasRoutes.js';
 import userRoutes from './routes/userRoutes.js'
 
+import path from 'path'
 
 import dotenv from 'dotenv'
 import cors from 'cors'
