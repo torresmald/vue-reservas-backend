@@ -6,6 +6,8 @@ import citasRoutes from './routes/citasRoutes.js';
 import userRoutes from './routes/userRoutes.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url';
+
 
 import dotenv from 'dotenv'
 import cors from 'cors'
