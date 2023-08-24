@@ -31,6 +31,11 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+
+app.get('/', (request, response) => {
+    response.status(200).json('Bienvenido a mi API Reservas.')
+  })
+
 app.use('/api/services' ,servicesRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/citas', citasRoutes)
