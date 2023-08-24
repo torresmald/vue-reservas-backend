@@ -31,14 +31,6 @@ connect()
 // }
 app.use(cors())
 
-// Servir los archivos estáticos de la aplicación Vue
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// Configuración para manejar todas las rutas y devolver la página principal
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
 
 app.get('/', (request, response) => {
     response.status(200).json('Bienvenido a mi API Reservas.')
