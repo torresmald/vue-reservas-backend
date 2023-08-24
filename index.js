@@ -31,6 +31,9 @@ connect()
 // }
 app.use(cors())
 
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 app.get('/', (request, response) => {
     response.status(200).json('Bienvenido a mi API Reservas.')
