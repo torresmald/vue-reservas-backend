@@ -19,17 +19,17 @@ app.use(express.json())
 
 connect()
 
-// const whiteList = process.env.FRONT_URL
-// const corsOptions = {
-//     origin: function(origin, callback) {
-//         if(whiteList.includes(origin)){
-//             callback(null, true)
-//         }else {
-//             callback(new Error('Error de Cors'), false)
-//         }
-//     }
-// }
-app.use(cors())
+const whiteList = process.env.FRONT_URL
+const corsOptions = {
+    origin: function(origin, callback) {
+        if(whiteList.includes(origin)){
+            callback(null, true)
+        }else {
+            callback(new Error('Error de Cors'), false)
+        }
+    }
+}
+app.use(cors(corsOptions))
 
 
 app.get('/', (request, response) => {

@@ -36,12 +36,12 @@ const getCitaByDate = async (request, response) => {
     }
 
     const isoDate = formatISO(newDate)
-    const appointments = await Citas.find({ date: {
+    const citas = await Citas.find({ date: {
         $gte : startOfDay(new Date(isoDate)),
         $lte: endOfDay(new Date(isoDate))
     }}).select('time')
 
-    response.json(appointments)
+    response.json(citas)
 }
 
 
