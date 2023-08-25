@@ -27,23 +27,24 @@ const createCita = async (request, response) => {
 
 const getCitaByDate = async (request, response) => {
     const { date } = request.query
-    const newDate = parse(date, 'dd/MM/yyyy', new Date())
-    if (!isValid(newDate)) {
-        const error = new Error('Fecha no Válida')
-        return response.status(400).json({ msg: error.message })
-    }
-    const isoDate = formatISO(newDate)
-    const citas = await Citas.find({
-        date: {
-            $gte: startOfDay(new Date(isoDate)),
-            $lte: endOfDay(new Date(isoDate))
-        }
-    })
 
-    response.status(200).json(
-        citas
-    )
+    const newDate = parse(date, 'dd/MM/yyyy', new Date())
+
+    if(!isValid(newDate)) {
+        const error = new Error('Fecha no válida')
+        return response.status(400).json({  msg: error.message })
+    }
+
+    const isoDate = formatISO(newDate)
+    const appointments = await Citas.find({ date: {
+        $gte : startOfDay(new Date(isoDate)),
+        $lte: endOfDay(new Date(isoDate))
+    }}).select('time')
+
+    response.json(appointments)
 }
+
+
 
 const deleteCita = async (request, response) => {
     const { id } = request.params
