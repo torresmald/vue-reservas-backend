@@ -48,7 +48,7 @@ const registerUser = async (request, response, next) => {
             token: uniqueId()
         })
 
-        sendEmailVerification({
+        await sendEmailVerification({
             name: newUser.name,
             email: newUser.email,
             token: newUser.token
